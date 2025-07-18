@@ -2,7 +2,7 @@ const { chromium } = require('playwright');
 const { google } = require('googleapis');
 const fs = require('fs');
 
-const credentials = JSON.parse(process.env.GOOGLE_SERVICE_JSON);
+const credentials = JSON.parse(process.env.GOOGLE_SERVICE_JSON.replace(/\\n/g, '\n'));
 const auth = new google.auth.GoogleAuth({
   credentials,
   scopes: ['https://www.googleapis.com/auth/spreadsheets']
