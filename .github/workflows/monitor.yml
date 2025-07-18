@@ -1,0 +1,32 @@
+name: Monitor Form Load Time
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # Runs daily at 7am UTC
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          npm install playwright googleapis
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Monitor Script
+        env:
+          GOOGLE_SERVICE_JSON: ${{ secrets.GOOGLE_SERVICE_JSON }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+        run: node monitor.js
